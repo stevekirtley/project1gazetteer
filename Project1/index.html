@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geo-Radar Gazetteer</title>
+    <meta name="author" content="Graham Thomas">
+    <meta name="description" content="Geographic Map with AJAX, PHP and API">
+    
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
+     integrity="sha256-sA+zWATbFveLLNqWO2gtiw3HL/lh1giY/Inf1BJ0z14="
+     crossorigin=""/>
+    <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
+     integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
+     crossorigin=""></script>
+    <!-- CSS only --> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link rel="stylesheet" href="libs/CSS/style.css">
+
+</head>
+<body>
+    <header>
+        <div class="container-fluid">
+            <div class="row" id="headCol">
+              <div class="col" id="title">
+                 <h1 class="p-1">Geo-Radar | <span>Gazetteer</span></h1>
+              </div>
+            </div>
+        </div>		
+    </header>
+
+    <main>
+        <div class="col">
+            <label for="country" id="c-label">Select a Country:</label>
+            <select name="country" class="form-control-sm m-2" id="country"></select> 
+          </div>
+          <div class="col" id="filler">
+              <!-- Filler Column -->
+          </div>
+
+        <div id="geoMap"></div>
+    </main>
+
+<script src="/libs/JS/script.js"></script>
+</body>
+</html>
