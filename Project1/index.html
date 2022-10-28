@@ -15,6 +15,7 @@
     <script src="https://unpkg.com/leaflet@1.9.2/dist/leaflet.js"
      integrity="sha256-o9N1jGDZrf5tS+Ft4gbIK7mYMipq9lqpVJ91xHSyKhg="
      crossorigin=""></script>
+     <script src="libs/easy-button/easy-button.js"></script>
     <!-- CSS only --> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="libs/CSS/style.css">
@@ -35,14 +36,80 @@
         <div class="col">
             <label for="country" id="c-label">Select a Country:</label>
             <select name="country" class="form-control-sm m-2" id="country"></select> 
-          </div>
-          <div class="col" id="filler">
-              <!-- Filler Column -->
-          </div>
+        </div>
 
         <div id="geoMap"></div>
+
+        <!-- Modal 1 - Country Information -->
+			<div class="modal fade" id="countryInfoModal" tabindex="-1" role="dialog" aria-labelledby="countryInfoModalCenterTitle" aria-hidden="false">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						
+						<div class="modal-header">
+							<h5 class="modal-title modalTitle" id="Modal1Title"></h5>
+							
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					
+						<div class="modal-body">
+							
+							<img id="countryFlag" alt="flag">
+							<br><br>
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th scope="col" colspan="2">Country Information</th>
+								  	</tr>
+								</thead>
+
+								<tbody class="countryInfo">
+									<tr>
+										<th scope="row">Country Name</th>
+										<td id="countryInfoName"></td>
+									</tr>
+									<tr>
+										<th scope="row">Capital City</th>
+										<td id="countryInfoCapital"></td>
+									</tr>
+									<tr>
+										<th scope="row">Timezone</th>
+										<td id="countryInfoTimezone"></td>
+									</tr>
+									<tr>
+										<th scope="row">Time Offset (GMT)</th>
+										<td id="countryInfoOffset"></td>
+									</tr>
+									<tr>
+										<th scope="row">Population</th>
+										<td id="countryInfoPopulation"></td>
+									</tr>
+									<tr>
+										<th scope="row">Area (KM²)</th>
+										<td id="countryInfoArea"></td>
+									</tr>
+									<tr>
+										<th scope="row">Language</th>
+										<td id="countryInfoLanguage"></td>
+									</tr>
+								</tbody>
+							</table>
+                        </div>
+                        
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
     </main>
 
-<script src="/libs/JS/script.js"></script>
+
+<script src="./libs/JS/jquery-2.2.3.min.js"></script>
+<script src="./libs/JS/script.js"></script>
+
 </body>
 </html>
