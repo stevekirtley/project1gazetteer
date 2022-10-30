@@ -7,6 +7,8 @@
     <title>Geo-Radar Gazetteer</title>
     <meta name="author" content="Graham Thomas">
     <meta name="description" content="Geographic Map with AJAX, PHP and API">
+
+    <script src="./libs/JS/jquery-3.6.1.min.js"></script>
     
     <!-- Leaflet -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.2/dist/leaflet.css"
@@ -19,6 +21,8 @@
     <!-- CSS only --> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
     <link rel="stylesheet" href="libs/CSS/style.css">
+    <!-- Font Awesome -->
+    <script src="https://kit.fontawesome.com/6e03bdd5f0.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
@@ -55,8 +59,8 @@
 					
 						<div class="modal-body">
 							
-							<img id="countryFlag" alt="flag">
-							<br><br>
+							<img id="countryFlag" alt="Flag">
+							<br>
 							<table class="table table-striped">
 								<thead>
 									<tr>
@@ -74,14 +78,6 @@
 										<td id="countryInfoCapital"></td>
 									</tr>
 									<tr>
-										<th scope="row">Timezone</th>
-										<td id="countryInfoTimezone"></td>
-									</tr>
-									<tr>
-										<th scope="row">Time Offset (GMT)</th>
-										<td id="countryInfoOffset"></td>
-									</tr>
-									<tr>
 										<th scope="row">Population</th>
 										<td id="countryInfoPopulation"></td>
 									</tr>
@@ -92,6 +88,10 @@
 									<tr>
 										<th scope="row">Language</th>
 										<td id="countryInfoLanguage"></td>
+									</tr>
+                                    <tr>
+										<th scope="row">Timezone</th>
+										<td id="countryInfoTimezone"></td>
 									</tr>
 								</tbody>
 							</table>
@@ -108,8 +108,11 @@
     </main>
 
 
-<script src="./libs/JS/jquery-2.2.3.min.js"></script>
-<script src="./libs/JS/script.js"></script>
+    <!-- Bootstrap links -->
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+<script src="./libs/JS/script2.js"></script>
 
 </body>
 </html>

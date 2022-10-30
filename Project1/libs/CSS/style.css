@@ -24,3 +24,14 @@ body,
 #country {
     color: #000;
 }
+
+#countryBtn {
+    background-color: #00688b;
+    color: antiquewhite;
+    margin: 4px;
+}
+
+#countryBtn:hover {
+    background-color: #00499b;
+    color: #fff;
+}

@@ -65,10 +65,6 @@ function findAvgLatLng(country){
 
 // Main AJAX & jQuery Code
 $(document).ready(() => {
-    
-    // $.getJSON("./libs/JS/JSON/countryBorders.geo.json", function(data){
-    //     console.log(data)
-    // })
 
     $.ajax({
         type: 'GET',
@@ -104,13 +100,28 @@ $(document).ready(() => {
              }
              $('#country').html(listHTML);
 
-        }},)
+             function geoSuccess(position) {
+                currentLat = position.coords.latitude;
+                currentLng = position.coords.longitude;
+                getCurrentCountry(currentLat, currentLng);
+             }}
+            
+
+                // ---------------- Welcome Alert Message ----------------
+                
+
+        
+    
+
+        
+
+
 
         $('#country').change(() => {
         
     
             var e = document.getElementById("country");
-            var value = e.options[e.selectedIndex].value;// get selected option value
+            // var value = e.options[e.selectedIndex].value;// get selected option value
             var selectedCountry = e.options[e.selectedIndex].text;
     
             var countryNoSpaces = selectedCountry.replace(/\s+/g, '');
@@ -118,58 +129,89 @@ $(document).ready(() => {
     
             updateMap(currentCountry.geoType, currentCountry.coordinates, true);
     
-            // getAllInfo(currentCountry)
+            getAllInfo(currentCountry)
     
             setTimeout(function(){    
                 $('#capital').click();
                 $('#cities').click();
             }, 2000); 
     
-    
+        
         })
     
     });
-    
-    
-    function updateMap(type, coordinates, borderChange){
 
+    // function getAllInfo(country) {
+    //     getCountryInfo(country);
+
+    //     getRESTCountriesInfo(country);
+    // }
+
+
+    // Geonames Timezone
+async function getCurrentCountry(lat,lng){
+
+    // API Call to GeoNames to get users country info
+    await $.ajax({
+        url: "libs/php/timezone.php",
+        type: 'POST',
+        dataType: 'json',
+        data: {
+            lat: lat,
+            lng: lng,
+        },
+        success: function(result) {
+
+            //console.log(JSON.stringify(result));
+
+            if (result.status.name == "ok") {
+                userCountryName = result['data']['countryName'];
+                var userCountrySpaces = userCountryName 
+                var userCountryNoSpaces = userCountrySpaces.replace(/\s+/g, '');
+                currentCountry = window[userCountryNoSpaces];
+                
+            }
         
-        map.eachLayer(function (layer) {
-            if(layer != geoWorldMap){
-                map.removeLayer(layer);
-            }
-        });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(JSON.stringify(jqXHR));
+            console.log(JSON.stringify(textStatus));
+            console.log(JSON.stringify(errorThrown));
+        }
+    }); 
+
+    updateMap(currentCountry.geoType, currentCountry.coordinates, false); 
+
+    $('#country').val(currentCountry.iso_a2).change();
+
+
+    // ---------------- Stop the PreLoader ----------------
+    $('#preloader').fadeOut(function(){
+        $(this).remove();
+    });
     
-        border = new L.geoJSON({
-            "type": type,
-            "coordinates": coordinates
-        },{
-            style: {
-                color: "brown"
-            }
-        }).addTo(map);
-    
-        map.fitBounds(border.getBounds());
-    }
+}
+
 
 // Country Info API
 
 function getCountryInfo(country){
 
     $.ajax({
-        url: "./libs/PHP/getCountryInfo.php",
+        url: "./libs/PHP/countryInfo.php",
         type: 'GET',
         dataType: 'json',
         data: {
             country: country.iso_a2,
         },
         success: function(result) {
+            
 
             if (result.status.name == "ok") {
                 
+                console.log(result);
                 country.area = result['data']['geonames']['0']['areaInSqKm'];
                 country.capitalCity = result['data']['geonames']['0']['capital'];
-                country.continent = result['data']['geonames']['0']['continentName'];
                 country.currencyCode = result['data']['geonames']['0']['currencyCode'];
                 country.languages = result['data']['geonames']['0']['languages'];
                 country.population = result['data']['geonames']['0']['population'];  
@@ -183,12 +225,44 @@ function getCountryInfo(country){
     }); 
 };
 
+function getRESTCountriesInfo(country){
+
+    $.ajax({
+        url: "./libs/php/restcountries.php",
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            alpha3: country.iso_a3,
+        },
+        success: function(result) {
+
+            if (result.status.name == "ok") {
+                country.flag = result['data']['flag'];
+                // country.languages = result['data']['languages']['0']['name'];
+                // country.currencyCode = result['data']['currencies']['0']['code'];
+                // country.currencyName = result['data']['currencies']['0']['name'];
+                // country.currencySymbol = result['data']['currencies']['0']['symbol'];
+                // country.topLevelDomain = result['data']['topLevelDomain']['0'];
+                // country.callingCode = result['data']['callingCodes'];
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(JSON.stringify(jqXHR));
+            console.log(JSON.stringify(textStatus));
+            console.log(JSON.stringify(errorThrown));
+        }
+    }); 
+};
+
+
+
+
 
 L.easyButton({
-    position: 'bottomleft',
+    position: 'topleft',
     id: 'countryBtn',
     states: [{
-        icon: "none",
+        icon: "fa-info",
         // stateName: 'unchecked',
         title: 'Show Country Information',
         onClick: function(btn,map) {
@@ -203,16 +277,16 @@ L.easyButton({
             document.getElementById('countryFlag').src = currentCountry.flag;
             document.getElementById('countryInfoName').innerHTML = currentCountry.name;
             document.getElementById('countryInfoCapital').innerHTML = currentCountry.capitalCity;
-            document.getElementById('countryInfoTimezone').innerHTML = currentCountry.timezone;
-            document.getElementById('countryInfoOffset').innerHTML = currentCountry.timeOffset;
-            document.getElementById('countryInfoPopulation').innerHTML = `${(currentCountry.population / 1000000).toFixed(1)} M`;
-            document.getElementById('countryInfoArea').innerHTML = `${Math.floor(currentCountry.area)}`;
+            // document.getElementById('countryInfoPopulation').innerHTML = `${(currentCountry.population / 1000000).toFixed(1)} M`;
+            // document.getElementById('countryInfoArea').innerHTML = `${Math.floor(currentCountry.area)}`;
             document.getElementById('countryInfoLanguage').innerHTML = currentCountry.languages;
-            document.getElementById('countryInfoCurrencyCode').innerHTML = `${currentCountry.currencyCode} (${currentCountry.currencySymbol})`;
-            document.getElementById('countryInfoCurrencyName').innerHTML = currentCountry.currencyName;
-            document.getElementById('countryInfoExchange').innerHTML = `${(currentCountry.exchangeRate).toFixed(2)}`;
-            document.getElementById('countryInfoTLD').innerHTML = currentCountry.topLevelDomain;
-            document.getElementById('countryInfoCalling').innerHTML = `+${currentCountry.callingCode}`;
+            // document.getElementById('countryInfoCurrencyCode').innerHTML = `${currentCountry.currencyCode} (${currentCountry.currencySymbol})`;
+            // document.getElementById('countryInfoCurrencyName').innerHTML = currentCountry.currencyName;
+            // document.getElementById('countryInfoExchange').innerHTML = `${(currentCountry.exchangeRate).toFixed(2)}`;
+            // document.getElementById('countryInfoTLD').innerHTML = currentCountry.topLevelDomain;
+            // document.getElementById('countryInfoCalling').innerHTML = `+${currentCountry.callingCode}`;
+            console.log(currentCountry);
+            console.log(country.languages);
 
         }
     }, {
@@ -223,3 +297,26 @@ L.easyButton({
         }
     }]
 }).addTo(map);
+
+
+
+function updateMap(type, coordinates, borderChange){
+
+        
+    map.eachLayer(function (layer) {
+        if(layer != geoWorldMap){
+            map.removeLayer(layer);
+        }
+    });
+
+    border = new L.geoJSON({
+        "type": type,
+        "coordinates": coordinates
+    },{
+        style: {
+            color: "brown"
+        }
+    }).addTo(map);
+
+    map.fitBounds(border.getBounds());
+}
