@@ -592,12 +592,15 @@ L.easyButton({
                 
                 document.getElementById('Modal4Title').innerHTML = `Latest Top News Stories for ${currentCountry.name}`;
                 document.getElementById('article1Link').href = currentCountry.news_article1[1];
+                // document.getElementById('article1Img').src = currentCountry.news_article1[?];
                 document.getElementById('article1Title').innerHTML = currentCountry.news_article1[0];
                 document.getElementById('article1Source').innerHTML = `<em>Source: ${currentCountry.news_article2[2]}</em>`;
                 document.getElementById('article2Link').href = currentCountry.news_article2[1];
+                // document.getElementById('article2Img').src = currentCountry.news_article2[?];
                 document.getElementById('article2Title').innerHTML = currentCountry.news_article2[0];
                 document.getElementById('article2Source').innerHTML = `<em>Source: ${currentCountry.news_article2[2]}</em>`;
                 document.getElementById('article3Link').href = currentCountry.news_article3[1];
+                // document.getElementById('article3Img').src = currentCountry.news_article3[?];
                 document.getElementById('article3Title').innerHTML = currentCountry.news_article3[0];
                 document.getElementById('article3Source').innerHTML = `<em>Source: ${currentCountry.news_article3[2]}</em>`;
 
