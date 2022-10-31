@@ -44,8 +44,8 @@
 
         <div id="geoMap"></div>
 
-        <!-- Modal 1 - Country Information -->
-			<div class="modal fade" id="countryInfoModal" tabindex="-1" role="dialog" aria-labelledby="countryInfoModalCenterTitle" aria-hidden="false">
+            <!-- Modal 1 - Country Information -->
+			<div class="modal fade" id="countryInfoModal" tabindex="-1" role="dialog" aria-labelledby="countryInfoModalCenterTitle" aria-hidden="true">
 				<div class="modal-dialog modal-dialog-centered" role="document">
 					<div class="modal-content">
 						
@@ -101,8 +101,265 @@
                         <button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button>
                     </div>
 
+                    </div>
                 </div>
             </div>
+        
+
+
+            <!-- Modal 2 - Currency Information -->
+			<div class="modal fade" id="currencyInfoModal" tabindex="-1" role="dialog" aria-labelledby="currencyInfoModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						
+						<div class="modal-header">
+							<h5 class="modal-title modalTitle" id="Modal2Title"></h5>
+							
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					
+						<div class="modal-body">
+							
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th scope="col" colspan="2">Currency Information</th>
+								  	</tr>
+								</thead>
+
+								<tbody class="currencyInfo">
+									<tr>
+										<th scope="row">Currency Code</th>
+										<td id="currencyInfoCurrencyCode"></td>
+									</tr>
+									<tr>
+										<th scope="row">Currency Name</th>
+										<td id="currencyInfoCurrencyName"></td>
+									</tr>
+									<tr>
+										<th scope="row">Current Exchange Rate</th>
+										<td id="currencyInfoExchange"></td>
+									</tr>
+									<tr>
+										<th scope="row">Top Level Domain (www)</th>
+										<td id="currencyInfoTLD"></td>
+									</tr>
+									<tr>
+										<th scope="row">Calling Code</th>
+										<td id="currencyInfoCalling"></td>
+									</tr>
+								</tbody>
+							</table>
+                        </div>
+                        
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        
+
+
+            <!-- Modal 3 - Weather -->
+			<div class="modal fade" id="weatherModal" tabindex="-1" role="dialog" aria-labelledby="weatherModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						
+						<div class="modal-header">
+							<h5 class="modal-title modalTitle" id="Modal3Title"></h5>
+							
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					
+						<div class="modal-body">
+							
+                            <table class="table table-striped">
+								<thead>
+									<tr>
+										<th scope="col" colspan="4" class="weatherHead">Current</th>
+								  	</tr>
+								</thead>
+
+								<tbody class="weatherTable">
+									<tr>
+										<td><i class="fas fa-temperature-high"></i></td>
+										<th scope="row">Temperature </th>
+										<td id="currentTemp"></td>
+										<td rowspan="3" class="weatherbground"><img id="currentIcon" class="weatherIcon" alt="Current Weather Icon"></td>
+									</tr>
+									<tr>
+										<td><i class="far fa-sun"></i></td>
+										<th scope="row">Feels Like </th>
+										<td id="currentFeelsLike"></td>
+									</tr>
+									<tr>
+										<td><i class="fas fa-wind"></i></td>
+										<th scope="row">Conditions</th>
+										<td id="currentConditions"></td>
+									</tr>
+								</tbody>
+							</table>
+
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th scope="col" colspan="4" class="weatherHead">Tomorrow</th>
+								  	</tr>
+								</thead>
+
+								<tbody class="weatherTable">
+									<tr>
+										<td><i class="fas fa-temperature-high"></i></td>
+										<th scope="row">Temperature </th>
+										<td id="tomorrowTemp"></td>
+										<td rowspan="3" class="weatherbground"><img id="tomorrowIcon" class="weatherIcon" alt="Tomorrow Weather Icon"></td>
+									</tr>
+									<tr>
+										<td><i class="far fa-sun"></i></td>
+										<th scope="row">Feels Like </th>
+										<td id="tomorrowFeelsLike"></td>
+									</tr>
+									<tr>
+										<td><i class="fas fa-wind"></i></td>
+										<th scope="row">Conditions</th>
+										<td id="tomorrowConditions"></td>
+									</tr>
+								</tbody>
+							</table>
+
+							<table class="table table-striped">
+								<thead>
+									<tr>
+										<th scope="col" colspan="4" class="weatherHead" id="2DayName"></th>
+								  	</tr>
+								</thead>
+
+								<tbody class="weatherTable">
+									<tr>
+										<td><i class="fas fa-temperature-high"></i></td>
+										<th scope="row">Temperature </th>
+										<td id="2dayTemp"></td>
+										<td rowspan="3" class="weatherbground"><img id="2dayIcon" class="weatherIcon" alt="2 Days Weather Icon"></td>
+									</tr>
+									<tr>
+										<td><i class="far fa-sun"></i></td>
+										<th scope="row">Feels Like </th>
+										<td id="2dayFeelsLike"></td>
+									</tr>
+									<tr>
+										<td><i class="fas fa-wind"></i></td>
+										<th scope="row">Conditions</th>
+										<td id="2dayConditions"></td>
+									</tr>
+								</tbody>
+							</table>
+
+						</div>
+											
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button>
+						</div>
+				    </div>
+				</div>
+			</div>
+
+
+            <!-- Modal 4 - News -->
+			<div class="modal fade" id="newsModal" tabindex="-1" role="dialog" aria-labelledby="newsModalCenterTitle" aria-hidden="true">
+				<div class="modal-dialog modal-dialog-centered" role="document">
+					<div class="modal-content">
+						
+						<div class="modal-header">
+							<h5 class="modal-title modalTitle" id="Modal4Title"></h5>
+							
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+						</div>
+					
+						<div class="modal-body">
+							
+							<table class="table">
+								<thead>
+									<tr>
+										<th scope="col" colspan="4">Top Breaking Story</th>
+									</tr>
+								</thead>
+
+								<tbody class="newsTable">
+									<tr>
+										<td rowspan="3" colspan="2">
+											<a id="article1Link" target="_blank"> 
+												<img id="article1Img" class="newsImage" alt="News Article 1 Image">
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<td id="article1Title" class="newsTitle" colspan="2"></td>
+									</tr>
+									<tr>
+										<td id="article1Source" colspan="2"></td>
+									</tr>
+
+								</tbody>
+							</table>
+
+							<table class="table">
+								<thead>
+									<tr>
+										<th scope="col" colspan="4">Additional Headlines</th>
+									</tr>
+								</thead>
+
+								<tbody class="newsTable">
+									<tr>
+										<td rowspan="3" colspan="2">
+											<a id="article2Link" target="_blank"> 
+												<img id="article2Img" class="newsImage" alt="News Article 2 Image">
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<td id="article2Title" class="newsTitle" colspan="2"></td>
+									</tr>
+									<tr>
+										<td id="article2Source" colspan="2"></td>
+									</tr>
+
+									<tr>
+										<td rowspan="3" colspan="2">
+											<a id="article3Link" target="_blank"> 
+												<img id="article3Img" class="newsImage" alt="News Article 3 Image">
+											</a>
+										</td>
+									</tr>
+									<tr>
+										<td id="article3Title" class="newsTitle" colspan="2"></td>
+									</tr>
+									<tr>
+										<td id="article3Source" colspan="2"></td>
+									</tr>
+
+								</tbody>
+							</table>
+							
+						</div>
+											
+						<div class="modal-footer">
+							<button type="button" class="btn btn-primary close" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+            </div>
+        
+
+
         </div>
 
     </main>

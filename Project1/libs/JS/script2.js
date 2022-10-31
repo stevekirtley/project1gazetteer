@@ -38,14 +38,14 @@ function Country(name, iso_a2, iso_a3, iso_n3, geoType, coordinates){
     this.topLevelDomain;
     this.callingCode;
     
-    // Modal 2 - Weather - ([Temp] [FeelsLike] [Weather] [WeatherIcon])
+    // Modal 3 - Weather - ([Temp] [FeelsLike] [Weather] [WeatherIcon])
     this.weather_current = [];
     this.weather_tomorrow = []; 
     this.weather_2days = []; 
     this.weather_3days = []; 
     this.weather_4days = []; 
     
-    // Modal 3 - News Articles - ([Image] [Title] [URL] [Source] [Published])
+    // Modal 4 - News Articles - ([Image] [Title] [URL] [Source] [Published])
     this.news_article1 = [];
     this.news_article2 = [];
     this.news_article3 = [];
@@ -58,7 +58,7 @@ $(document).ready(() => {
     // Get the country information
     $.ajax({
         type: 'GET',
-        url: "./libs/JS/JSON/countryBorders.geo.json",
+        url: "./libs/js/json/countryBorders.geo.json",
         data: {},
         dataType: 'json',
         success: function(data) {
@@ -164,10 +164,10 @@ function getAllInfo(country){
     getCountryInfo(country);
 
     // Get Exchange Rate
-    // getExchangeRate(country);
+    getExchangeRate(country);
 
     // Weather
-    // getWeatherInfo(country);
+    getWeatherInfo(country);
 
     // Timezone
     getTimezone(country);
@@ -176,17 +176,16 @@ function getAllInfo(country){
     getRESTCountryInfo(country);
 
     // Top Country News
-    // getNews(country);
+    getNews(country);
 
 
 }
 
 // -------------------------------- Get User Current Country Info From GeoNames --------------------------------
 
-// Geonames API username
 async function getCurrentCountry(lat,lng){
 
-    // API Call to GeoNames to get users country info
+    // API Call to get users country info
     await $.ajax({
         url: "./libs/php/currentCountry.php",
         type: 'POST',
@@ -196,8 +195,10 @@ async function getCurrentCountry(lat,lng){
             lng: lng,
         },
         success: function(result) {
+			
+			// console.log(result);
 
-            //console.log(JSON.stringify(result));
+            // console.log(JSON.stringify(result));
 
             if (result.status.name == "ok") {
                 userCountryName = result['data']['countryName'];
@@ -260,60 +261,59 @@ function getCountryInfo(country){
 
 // -------------------------------- Get Exchange Rate from Open Exchange Rate  --------------------------------
     
-// function getExchangeRate(country){
-//     $.ajax({
-//         url: "libs/php/getExchangeRate.php",
-//         type: 'GET',
-//         dataType: 'json',
-//         data: {},
-//         success: function(result) {
+function getExchangeRate(country){
+    $.ajax({
+        url: "./libs/php/exchangeRate.php",
+        type: 'GET',
+        dataType: 'json',
+        data: {},
+        success: function(result) {
 
-//             if (result.status.name == "ok") {
-//                 country.exchangeRate = result['data']['rates'][country.currencyCode];
-//             }
-//         },
-//         error: function(jqXHR, textStatus, errorThrown) {
-//             console.log(JSON.stringify(jqXHR));
-//             console.log(JSON.stringify(textStatus));
-//             console.log(JSON.stringify(errorThrown));
-//         }
-//     }); 
-// }
+            if (result.status.name == "ok") {
+                country.exchangeRate = result['data']['rates'][country.currencyCode];
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(JSON.stringify(jqXHR));
+            console.log(JSON.stringify(textStatus));
+            console.log(JSON.stringify(errorThrown));
+        }
+    }); 
+}
 
 // -------------------------------- Get Weather Info From OpenWeather  --------------------------------
     
-// function getWeatherInfo(country){
-//     $.ajax({
-//         url: "libs/php/getWeather.php",
-//         type: 'GET',
-//         dataType: 'json',
-//         data: {
-//             lat: country.lat,
-//             lng: country.lng,
-//         },
-//         success: function(result) {
+function getWeatherInfo(country){
+    $.ajax({
+        url: "./libs/php/openWeather.php",
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            lat: country.lat,
+            lng: country.lng,
+        },
+        success: function(result) {
+
+            
+            // console.log(JSON.stringify(result));
                         
-//             if (result.status.name == "ok") {
+            if (result.status.name == "ok") {
 
-//                 country.weather_current.push(result['data']['current']['temp'] - 273.15,result['data']['current']['feels_like'] - 273.15,result['data']['current']['weather']['0']['main'],result['data']['current']['weather']['0']['icon']);
+                country.weather_current.push(result['data']['current']['temp'] - 273.15,result['data']['current']['feels_like'] - 273.15,result['data']['current']['weather']['0']['main'],result['data']['current']['weather']['0']['icon']);
 
-//                 country.weather_tomorrow.push(result['data']['daily']['0']['temp']['day'] - 273.15, result['data']['daily']['0']['feels_like']['day'] - 273.15,result['data']['daily']['0']['weather']['0']['main'],result['data']['daily']['0']['weather']['0']['icon']);
+                country.weather_tomorrow.push(result['data']['daily']['0']['temp']['day'] - 273.15, result['data']['daily']['0']['feels_like']['day'] - 273.15,result['data']['daily']['0']['weather']['0']['main'],result['data']['daily']['0']['weather']['0']['icon']);
 
-//                 country.weather_2days.push(result['data']['daily']['1']['temp']['day'] - 273.15, result['data']['daily']['1']['feels_like']['day'] - 273.15,result['data']['daily']['1']['weather']['0']['main'],result['data']['daily']['1']['weather']['0']['icon']);
+                country.weather_2days.push(result['data']['daily']['1']['temp']['day'] - 273.15, result['data']['daily']['1']['feels_like']['day'] - 273.15,result['data']['daily']['1']['weather']['0']['main'],result['data']['daily']['1']['weather']['0']['icon']);
 
-//                 country.weather_3days.push(result['data']['daily']['2']['temp']['day'] - 273.15, result['data']['daily']['2']['feels_like']['day'] - 273.15,result['data']['daily']['2']['weather']['0']['main'],result['data']['daily']['2']['weather']['0']['icon']);
-
-//                 country.weather_4days.push(result['data']['daily']['3']['temp']['day'] - 273.15, result['data']['daily']['3']['feels_like']['day'] - 273.15,result['data']['daily']['3']['weather']['0']['main'],result['data']['daily']['3']['weather']['0']['icon']);
-
-//             }
-//         },
-//         error: function(jqXHR, textStatus, errorThrown) {
-//             console.log(JSON.stringify(jqXHR));
-//             console.log(JSON.stringify(textStatus));
-//             console.log(JSON.stringify(errorThrown));
-//         }
-//     }); 
-// }
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(JSON.stringify(jqXHR));
+            console.log(JSON.stringify(textStatus));
+            console.log(JSON.stringify(errorThrown));
+        }
+    }); 
+}
 
 // -------------------------------- Get Timezone from GeoNames --------------------------------
     
@@ -345,7 +345,9 @@ function getTimezone(country){
 // -------------------------------- Get REST Country Info  --------------------------------
     
 function getRESTCountryInfo(country){
-
+	
+	// console.log(country);
+	
     $.ajax({
         url: "./libs/php/restcountries.php",
         type: 'GET',
@@ -354,15 +356,18 @@ function getRESTCountryInfo(country){
             alpha3: country.iso_a3,
         },
         success: function(result) {
+			
 
             if (result.status.name == "ok") {
-                country.flag = result['data']['flag'];
-                country.languages = result['data']['languages']['0']['name'];
-                country.currencyCode = result['data']['currencies']['0']['code'];
-                country.currencyName = result['data']['currencies']['0']['name'];
-                country.currencySymbol = result['data']['currencies']['0']['symbol'];
-                country.topLevelDomain = result['data']['topLevelDomain']['0'];
-                country.callingCode = result['data']['callingCodes'];
+                country.flag = result['data']['0']['flags']['png'];
+				// Language array keys not known - 3 letters. 
+                // Used method from StackOverflow to access first key - https://stackoverflow.com/questions/3298477/get-the-first-key-name-of-a-javascript-object
+                country.languages = result['data']['0']['languages'][Object.keys(result['data']['0']['languages'])[0]];
+                country.currencyCode = result['data']['0']['currencies']['code'];
+                country.currencyName = result['data']['0']['currencies']['name'];
+                country.currencySymbol = result['data']['0']['currencies']['symbol'];
+                country.topLevelDomain = result['data']['0']['topLevelDomain'];
+                country.callingCode = result['data']['0']['callingCodes'];
             }
         },
         error: function(jqXHR, textStatus, errorThrown) {
@@ -377,34 +382,36 @@ function getRESTCountryInfo(country){
 
 // -------------------------------- Get News From NewsAPI  --------------------------------
     
-// function getNews(country){
-//     $.ajax({
-//         url: "libs/php/getNews.php",
-//         type: 'GET',
-//         dataType: 'json',
-//         data: {
-//             country: country.iso_a2,
-//         },
-//         success: function(result) {
+function getNews(country){
+    $.ajax({
+        url: "./libs/php/newsApi.php",
+        type: 'GET',
+        dataType: 'json',
+        data: {
+            country: country.iso_a2,
+        },
+        success: function(result) {
+            console.log(result);
+            
                         
-//             if (result.status.name == "ok") {
+            if (result.status.name == "ok") {
 
-//                 // Modal 4 - News Articles - ([Image] [Title] [URL] [Source] [Published])
-//                 country.news_article1.push(result['data']['articles']['0']['urlToImage'], result['data']['articles']['0']['title'], result['data']['articles']['0']['url'], result['data']['articles']['0']['source']['name'], result['data']['articles']['0']['publishedAt']);
+                // Modal 4 - News Articles - ([Image] [Title] [URL] [Source] [Published])
+                country.news_article1.push(result['data']['articles']['0']['title'], result['data']['articles']['0']['url'], result['data']['articles']['0']['source']['Name'], result['data']['articles']['0']['publishedAt']);
 
-//                 country.news_article2.push(result['data']['articles']['1']['urlToImage'], result['data']['articles']['1']['title'], result['data']['articles']['1']['url'], result['data']['articles']['1']['source']['name'], result['data']['articles']['1']['publishedAt']);
+                country.news_article2.push(result['data']['articles']['1']['title'], result['data']['articles']['1']['url'], result['data']['articles']['1']['source']['Name'], result['data']['articles']['1']['publishedAt']);
                 
-//                 country.news_article3.push(result['data']['articles']['2']['urlToImage'], result['data']['articles']['2']['title'], result['data']['articles']['2']['url'], result['data']['articles']['2']['source']['name'], result['data']['articles']['2']['publishedAt'])
+                country.news_article3.push(result['data']['articles']['2']['title'], result['data']['articles']['2']['url'], result['data']['articles']['2']['source']['Name'], result['data']['articles']['2']['publishedAt']);
 
-//             }
-//         },
-//         error: function(jqXHR, textStatus, errorThrown) {
-//             console.log(JSON.stringify(jqXHR));
-//             console.log(JSON.stringify(textStatus));
-//             console.log(JSON.stringify(errorThrown));
-//         }
-//     }); 
-// }
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(JSON.stringify(jqXHR));
+            console.log(JSON.stringify(textStatus));
+            console.log(JSON.stringify(errorThrown));
+        }
+    }); 
+}
 
 
 
@@ -443,7 +450,7 @@ L.easyButton({
     position: 'topleft',
     id: 'countryBtn',
     states: [{
-        icon: "fa-info",
+        icon: 'fa-folder',
         stateName: 'unchecked',
         title: 'Show Country Information',
         onClick: function(btn,map) {
@@ -455,19 +462,13 @@ L.easyButton({
             });
 
             document.getElementById('Modal1Title').innerHTML = `${currentCountry.name} Information`
-            // document.getElementById('countryFlag').src = currentCountry.flag;
+            document.getElementById('countryFlag').src = currentCountry.flag;
             document.getElementById('countryInfoName').innerHTML = currentCountry.name;
             document.getElementById('countryInfoCapital').innerHTML = currentCountry.capitalCity;
             document.getElementById('countryInfoTimezone').innerHTML = currentCountry.timezone;
-            // document.getElementById('countryInfoOffset').innerHTML = currentCountry.timeOffset;
             document.getElementById('countryInfoPopulation').innerHTML = `${(currentCountry.population / 1000000).toFixed(1)} M`;
             document.getElementById('countryInfoArea').innerHTML = `${Math.floor(currentCountry.area)}`;
             document.getElementById('countryInfoLanguage').innerHTML = currentCountry.languages;
-            // document.getElementById('countryInfoCurrencyCode').innerHTML = `${currentCountry.currencyCode} (${currentCountry.currencySymbol})`;
-            // document.getElementById('countryInfoCurrencyName').innerHTML = currentCountry.currencyName;
-            // document.getElementById('countryInfoExchange').innerHTML = `${(currentCountry.exchangeRate).toFixed(2)}`;
-            // document.getElementById('countryInfoTLD').innerHTML = currentCountry.topLevelDomain;
-            // document.getElementById('countryInfoCalling').innerHTML = `+${currentCountry.callingCode}`;
 
         }
     }, {
@@ -479,150 +480,83 @@ L.easyButton({
     }]
 }).addTo(map);
 
-// -------------------------------- Button 2 - Weather --------------------------------
 
-// L.easyButton({
+// -------------------------------- Button 2 - Currency Information --------------------------------
 
-//     id: 'weatherBtn',
-//     states: [{
-//         icon: "none",
-//         stateName: 'unchecked',
-//         title: 'Show Weather Forecast',
-//         onClick: function(btn,map) {
-            
-//             // Calculate the upcoming days
-//             const d = new Date();
-//             const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-//             var twoDays = d.getDay() + 2;
-//             var threeDays = d.getDay() + 3;
-
-//             if(twoDays > 6){
-//                 twoDays -=7;
-//             } 
-//             if (threeDays > 6){
-//                 threeDays -= 7;
-//             }
-
-//             twoDays = days[twoDays], 
-//             threeDays = days[threeDays];
-
-//             $("#weatherModal").modal("show");
-
-//             $(".close").click(function(){
-//                 $("#weatherModal").modal('hide');
-//             });
-
-//             document.getElementById('Modal2Title').innerHTML = `Weather Forecast for ${currentCountry.name}`
-//             document.getElementById('currentIcon').src = `http://openweathermap.org/img/w/${currentCountry.weather_current[3]}.png`
-//             document.getElementById('currentTemp').innerHTML = `${Math.floor(currentCountry.weather_current[0])}°C`;
-//             document.getElementById('currentFeelsLike').innerHTML = `${Math.floor(currentCountry.weather_current[1])}°C`;
-//             document.getElementById('currentConditions').innerHTML = currentCountry.weather_current[2];
-//             document.getElementById('tomorrowIcon').src = `http://openweathermap.org/img/w/${currentCountry.weather_tomorrow[3]}.png`
-//             document.getElementById('tomorrowTemp').innerHTML = `${Math.floor(currentCountry.weather_tomorrow[0])}°C`;
-//             document.getElementById('tomorrowFeelsLike').innerHTML = `${Math.floor(currentCountry.weather_tomorrow[1])}°C`;
-//             document.getElementById('tomorrowConditions').innerHTML = currentCountry.weather_tomorrow[2];
-//             document.getElementById('2DayName').innerHTML = twoDays;
-//             document.getElementById('2dayIcon').src = `http://openweathermap.org/img/w/${currentCountry.weather_2days[3]}.png`
-//             document.getElementById('2dayTemp').innerHTML = `${Math.floor(currentCountry.weather_2days[0])}°C`;
-//             document.getElementById('2dayFeelsLike').innerHTML = `${Math.floor(currentCountry.weather_2days[1])}°C`;
-//             document.getElementById('2dayConditions').innerHTML = currentCountry.weather_2days[2];
-//             document.getElementById('3DayName').innerHTML = threeDays;
-//             document.getElementById('3dayIcon').src = `http://openweathermap.org/img/w/${currentCountry.weather_3days[3]}.png`
-//             document.getElementById('3dayTemp').innerHTML = `${Math.floor(currentCountry.weather_3days[0])}°C`;
-//             document.getElementById('3dayFeelsLike').innerHTML = `${Math.floor(currentCountry.weather_3days[1])}°C`;
-//             document.getElementById('3dayConditions').innerHTML = currentCountry.weather_3days[2];
-//         }
-//     }, {
-//         icon: '&#x238C;',
-//         stateName: 'checked',
-//         onClick: function(btn,map) {
-//             btn.state('unchecked');
-//         }
-//     }]
-
-
-// }).addTo(map);
-
-
-
-
-// -------------------------------- Button 3 - Country News --------------------------------
-
-// L.easyButton({
-
-//     id: 'newsBtn',
-//     states: [{
-//         icon: "none",
-//         stateName: 'unchecked',
-//         title: 'Show Top Country News',
-//         onClick: function(btn,map) {
-//             if(currentCountry.news_article1[0]){
-
-//                 $("#newsModal").modal("show");
-
-//                 $(".close").click(function(){
-//                     $("#newsModal").modal('hide');
-//                 });
-                
-//                 document.getElementById('Modal4Title').innerHTML = `Latest Top News Stories for ${currentCountry.name}`;
-//                 document.getElementById('article1Link').href = currentCountry.news_article1[2];
-//                 document.getElementById('article1Img').src = currentCountry.news_article1[0];
-//                 document.getElementById('article1Title').innerHTML = currentCountry.news_article1[1];
-//                 document.getElementById('article1Source').innerHTML = `<em>Source: ${currentCountry.news_article2[3]}</em>`;
-//                 document.getElementById('article2Link').href = currentCountry.news_article2[2];
-//                 document.getElementById('article2Img').src = currentCountry.news_article2[0];
-//                 document.getElementById('article2Title').innerHTML = currentCountry.news_article2[1];
-//                 document.getElementById('article2Source').innerHTML = `<em>Source: ${currentCountry.news_article2[3]}</em>`;
-//                 document.getElementById('article3Link').href = currentCountry.news_article3[2];
-//                 document.getElementById('article3Img').src = currentCountry.news_article3[0];
-//                 document.getElementById('article3Title').innerHTML = currentCountry.news_article3[1];
-//                 document.getElementById('article3Source').innerHTML = `<em>Source: ${currentCountry.news_article3[3]}</em>`;
-
-//             } else {
-//                 $("#newsError").modal("show");
-
-//                 $(".close").click(function(){
-//                     $("#newsError").modal('hide');
-//                 });
-
-//                 document.getElementById('errorCountry').innerHTML = currentCountry.name;               
-
-//             }
-//         }
-//     }, {
-//         icon: '&#x238C;',
-//         stateName: 'checked',
-//         onClick: function(btn,map) {
-//             btn.state('unchecked');
-//         }
-//     }]
-
-
-// }).addTo(map);
-
-// // var markerClusters = L.markerClusterGroup();
-
-// var MapIcon = L.Icon.extend({
-//     options: {
-//         iconSize:     [30, 30],
-//         popupAnchor:  [0, -20]
-//     }
-// });
-
-
-
-// -------------------------------- 8. Reset Button --------------------------------
 L.easyButton({
-    position: 'topright',
-    id: 'reset',
+    position: 'topleft',
+    id: 'currencyBtn',
     states: [{
-        icon: "none",
+        icon: "fa-coins",
         stateName: 'unchecked',
-        title: 'Reset Icons',
+        title: 'Show Currency Information',
+        onClick: function(btn,map) {
+
+            $("#currencyInfoModal").modal("show");
+
+            $(".close").click(function(){
+                $("#currencyInfoModal").modal('hide');
+            });
+
+            document.getElementById('currencyInfoCurrencyCode').innerHTML = `${currentCountry.currencyCode} (${currentCountry.currencySymbol})`;
+            document.getElementById('currencyInfoCurrencyName').innerHTML = currentCountry.currencyName;
+            document.getElementById('currencyInfoExchange').innerHTML = `${(currentCountry.exchangeRate)}`;
+            document.getElementById('currencyInfoTLD').innerHTML = currentCountry.topLevelDomain;
+            document.getElementById('currencyInfoCalling').innerHTML = `+${currentCountry.callingCode}`;
+
+        }
+    }, {
+        icon: '&#x238C;',
+        stateName: 'checked',
+        onClick: function(btn,map) {
+            btn.state('unchecked');
+        }
+    }]
+}).addTo(map);
+
+// -------------------------------- Button 3 - Weather --------------------------------
+
+L.easyButton({
+
+    id: 'weatherBtn',
+    states: [{
+        icon: "fa-sun",
+        stateName: 'unchecked',
+        title: 'Show Weather Forecast (3 Day)',
         onClick: function(btn,map) {
             
-            updateMap(currentCountry.geoType, currentCountry.coordinates, true);      
-        
+            // Calculate the upcoming days
+            const d = new Date();
+            const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+            var twoDays = d.getDay() + 2;
+
+            if(twoDays > 6){
+                twoDays -=7;
+            } 
+
+            twoDays = days[twoDays], 
+
+            $("#weatherModal").modal("show");
+
+            $(".close").click(function(){
+                $("#weatherModal").modal('hide');
+            });
+
+            document.getElementById('Modal2Title').innerHTML = `3 Day Weather Forecast for ${currentCountry.name}`
+            document.getElementById('currentIcon').src = `http://openweathermap.org/img/w/${currentCountry.weather_current[3]}.png`
+            document.getElementById('currentTemp').innerHTML = `${Math.floor(currentCountry.weather_current[0])}°C`;
+            document.getElementById('currentFeelsLike').innerHTML = `${Math.floor(currentCountry.weather_current[1])}°C`;
+            document.getElementById('currentConditions').innerHTML = currentCountry.weather_current[2];
+            document.getElementById('tomorrowIcon').src = `http://openweathermap.org/img/w/${currentCountry.weather_tomorrow[3]}.png`
+            document.getElementById('tomorrowTemp').innerHTML = `${Math.floor(currentCountry.weather_tomorrow[0])}°C`;
+            document.getElementById('tomorrowFeelsLike').innerHTML = `${Math.floor(currentCountry.weather_tomorrow[1])}°C`;
+            document.getElementById('tomorrowConditions').innerHTML = currentCountry.weather_tomorrow[2];
+            document.getElementById('2DayName').innerHTML = twoDays;
+            document.getElementById('2dayIcon').src = `http://openweathermap.org/img/w/${currentCountry.weather_2days[3]}.png`
+            document.getElementById('2dayTemp').innerHTML = `${Math.floor(currentCountry.weather_2days[0])}°C`;
+            document.getElementById('2dayFeelsLike').innerHTML = `${Math.floor(currentCountry.weather_2days[1])}°C`;
+            document.getElementById('2dayConditions').innerHTML = currentCountry.weather_2days[2];
+            
         }
     }, {
         icon: '&#x238C;',
@@ -635,6 +569,68 @@ L.easyButton({
 
 }).addTo(map);
 
+
+
+
+// -------------------------------- Button 4 - Country News --------------------------------
+
+L.easyButton({
+
+    id: 'newsBtn',
+    states: [{
+        icon: "fa-newspaper",
+        stateName: 'unchecked',
+        title: 'Latest Country News',
+        onClick: function(btn,map) {
+            if(currentCountry.news_article1[0]){
+
+                $("#newsModal").modal("show");
+
+                $(".close").click(function(){
+                    $("#newsModal").modal('hide');
+                });
+                
+                document.getElementById('Modal4Title').innerHTML = `Latest Top News Stories for ${currentCountry.name}`;
+                document.getElementById('article1Link').href = currentCountry.news_article1[1];
+                document.getElementById('article1Title').innerHTML = currentCountry.news_article1[0];
+                document.getElementById('article1Source').innerHTML = `<em>Source: ${currentCountry.news_article2[2]}</em>`;
+                document.getElementById('article2Link').href = currentCountry.news_article2[1];
+                document.getElementById('article2Title').innerHTML = currentCountry.news_article2[0];
+                document.getElementById('article2Source').innerHTML = `<em>Source: ${currentCountry.news_article2[2]}</em>`;
+                document.getElementById('article3Link').href = currentCountry.news_article3[1];
+                document.getElementById('article3Title').innerHTML = currentCountry.news_article3[0];
+                document.getElementById('article3Source').innerHTML = `<em>Source: ${currentCountry.news_article3[2]}</em>`;
+
+            } else {
+                $("#newsError").modal("show");
+
+                $(".close").click(function(){
+                    $("#newsError").modal('hide');
+                });
+
+                document.getElementById('errorCountry').innerHTML = currentCountry.name;               
+
+            }
+        }
+    }, {
+        icon: '&#x238C;',
+        stateName: 'checked',
+        onClick: function(btn,map) {
+            btn.state('unchecked');
+        }
+    }]
+
+
+}).addTo(map);
+
+// var markerClusters = L.markerClusterGroup();
+
+var MapIcon = L.Icon.extend({
+    options: {
+        iconSize:     [30, 30],
+        popupAnchor:  [0, -20]
+    }
+});
 
 // -------------------------------- Update Country Border --------------------------------
 function updateMap(type, coordinates, borderChange){
@@ -658,3 +654,26 @@ function updateMap(type, coordinates, borderChange){
 
     map.fitBounds(border.getBounds());
 }
+
+
+//--------------------------------------------------
+// Get users location
+
+$( document ).ready(function() {
+
+    if ("geolocation" in navigator){ //check geolocation available 
+    //try to get user current location using getCurrentPosition() method
+        navigator.geolocation.getCurrentPosition(function(position){
+                
+            var currentCountry = getCurrentCountry(position.coords.latitude, position.coords.longitude);
+             
+            console.log("Found your location Lat : "+position.coords.latitude+" Lang :"+ position.coords.longitude);
+        });
+        
+        
+        
+    } else{
+        console.log("Browser doesn't support geolocation!");
+    }
+
+});

@@ -25,13 +25,30 @@ body,
     color: #000;
 }
 
-#countryBtn {
+#countryBtn,
+#weatherBtn,
+#currencyBtn,
+#newsBtn {
     background-color: #00688b;
     color: antiquewhite;
     margin: 4px;
 }
 
-#countryBtn:hover {
+#countryBtn:hover,
+#weatherBtn:hover,
+#currencyBtn:hover,
+#newsBtn:hover {
     background-color: #00499b;
     color: #fff;
 }
+
+/* #weatherBtn {
+    background-color: #00688b;
+    color: antiquewhite;
+    margin: 4px;
+}
+
+#weatherBtn:hover {
+    background-color: #00499b;
+    color: #fff;
+} */
